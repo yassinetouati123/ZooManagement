@@ -10,7 +10,9 @@ public abstract class Aquatic extends Animal {
     }
 
     public Aquatic(String family, String name, int age,
-                   boolean isMammal, String habitat) {
+                   boolean isMammal, String habitat)
+            throws InvalidAgeException {
+
         super(family, name, age, isMammal);
         this.habitat = habitat;
     }

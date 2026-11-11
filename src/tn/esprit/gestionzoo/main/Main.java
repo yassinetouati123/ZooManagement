@@ -1,9 +1,11 @@
 package tn.esprit.gestionzoo.main;
 
 import tn.esprit.gestionzoo.entity.Dolphin;
+import tn.esprit.gestionzoo.entity.InvalidAgeException;
 import tn.esprit.gestionzoo.entity.Penguin;
 import tn.esprit.gestionzoo.entity.Terrestrial;
 import tn.esprit.gestionzoo.entity.Zoo;
+import tn.esprit.gestionzoo.entity.ZooFullException;
 
 public class Main {
 
@@ -11,70 +13,76 @@ public class Main {
 
         Zoo zoo = new Zoo("Belvedere");
 
-        Terrestrial lion = new Terrestrial(
-                "Feline",
-                "Lion",
-                5,
-                true,
-                4
+        try {
+            Terrestrial lion = new Terrestrial(
+                    "Feline",
+                    "Lion",
+                    5,
+                    true,
+                    4
+            );
+
+            Dolphin dolphin = new Dolphin(
+                    "Cetacean",
+                    "Dolphin",
+                    8,
+                    true,
+                    "Ocean",
+                    45.5f
+            );
+
+            Penguin penguin = new Penguin(
+                    "Bird",
+                    "Penguin",
+                    4,
+                    false,
+                    "Antarctica",
+                    30.0f
+            );
+
+            Terrestrial elephant = new Terrestrial(
+                    "Elephantidae",
+                    "Elephant",
+                    15,
+                    true,
+                    4
+            );
+
+            zoo.addAquaticAnimal(dolphin);
+            zoo.addAquaticAnimal(penguin);
+
+            /*
+             * The zoo has only three cages.
+             * The first three additions will work.
+             */
+            zoo.addAnimal(lion);
+            zoo.addAnimal(dolphin);
+            zoo.addAnimal(penguin);
+
+            /*
+             * This fourth addition throws ZooFullException.
+             */
+            zoo.addAnimal(elephant);
+
+        } catch (InvalidAgeException exception) {
+            System.out.println(
+                    "InvalidAgeException: " + exception.getMessage()
+            );
+
+        } catch (ZooFullException exception) {
+            System.out.println(
+                    "ZooFullException: " + exception.getMessage()
+            );
+        }
+
+        System.out.println(
+                "\nFinal number of animals: " + zoo.getNbAnimals()
         );
 
-        Dolphin dolphin1 = new Dolphin(
-                "Cetacean",
-                "Dolphin One",
-                8,
-                true,
-                "Ocean",
-                45.5f
-        );
-
-        Dolphin dolphin2 = new Dolphin(
-                "Cetacean",
-                "Dolphin Two",
-                6,
-                true,
-                "Sea",
-                40.0f
-        );
-
-        Penguin penguin1 = new Penguin(
-                "Bird",
-                "Penguin One",
-                4,
-                false,
-                "Antarctica",
-                30.0f
-        );
-
-        Penguin penguin2 = new Penguin(
-                "Bird",
-                "Penguin Two",
-                5,
-                false,
-                "Antarctica",
-                42.5f
-        );
-
-        zoo.addAnimal(lion);
-        zoo.addAnimal(dolphin1);
-        zoo.addAnimal(dolphin2);
-        zoo.addAnimal(penguin1);
-        zoo.addAnimal(penguin2);
-
-        zoo.addAquaticAnimal(dolphin1);
-        zoo.addAquaticAnimal(dolphin2);
-        zoo.addAquaticAnimal(penguin1);
-        zoo.addAquaticAnimal(penguin2);
-
-        System.out.println(zoo);
-
-        System.out.println("\nAll animals:");
+        System.out.println("\nAnimals currently in the zoo:");
         zoo.displayAnimals();
 
-        System.out.println("\nAquatic animals:");
-        zoo.displayAquaticAnimals();
-
-        System.out.println("\nSwimming:");
+        System.out.println("\nAquatic animals swimming:");
         zoo.swimAllAquatics();
 
         System.out.println(
@@ -82,21 +90,34 @@ public class Main {
                         + zoo.maxPenguinSwimmingDepth()
         );
 
-        System.out.println("\nAquatic animals by type:");
         zoo.displayNumberOfAquaticsByType();
 
-        Penguin penguin3 = new Penguin(
-                "Another family",
-                "Penguin One",
-                4,
-                true,
-                "Antarctica",
-                100.0f
-        );
+        /*
+         * Separate test for a negative age.
+         */
+        try {
+            Penguin invalidPenguin = new Penguin(
+                    "Bird",
+                    "Invalid Penguin",
+                    -4,
+                    false,
+                    "Antarctica",
+                    25.0f
+            );
 
-        System.out.println(
-                "\nAre penguin1 and penguin3 equal? "
-                        + penguin1.equals(penguin3)
-        );
+            zoo.addAnimal(invalidPenguin);
+
+        } catch (InvalidAgeException exception) {
+            System.out.println(
+                    "\nInvalidAgeException: "
+                            + exception.getMessage()
+            );
+
+        } catch (ZooFullException exception) {
+            System.out.println(
+                    "\nZooFullException: "
+                            + exception.getMessage()
+            );
+        }
     }
 }
