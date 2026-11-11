@@ -3,7 +3,8 @@ package tn.esprit.gestionzoo.entity;
 public class Zoo {
 
     private String name;
-    private static final int nbrCages = 25;
+
+    private static final int nbrCages = 3;
 
     private Animal[] animals;
     private int nbAnimals;
@@ -14,31 +15,41 @@ public class Zoo {
     public Zoo() {
         animals = new Animal[nbrCages];
         aquaticAnimals = new Aquatic[10];
+
         nbAnimals = 0;
         nbAquaticAnimals = 0;
     }
 
     public Zoo(String name) {
         this.name = name;
+
         animals = new Animal[nbrCages];
         aquaticAnimals = new Aquatic[10];
+
         nbAnimals = 0;
         nbAquaticAnimals = 0;
     }
 
-    public boolean isZooFull() {
-        return nbAnimals >= nbrCages;
-    }
+    public void addAnimal(Animal animal) throws ZooFullException {
 
-    public boolean addAnimal(Animal animal) {
-        if (animal == null || isZooFull()) {
-            return false;
+        if (nbAnimals >= nbrCages) {
+            throw new ZooFullException(
+                    "Cannot add " + animal.getName()
+                            + ": the zoo already contains "
+                            + nbrCages + " animals"
+            );
         }
 
         animals[nbAnimals] = animal;
         nbAnimals++;
 
-        return true;
+        System.out.println(
+                animal.getName() + " was added successfully"
+        );
+
+        System.out.println(
+                "Number of animals: " + nbAnimals
+        );
     }
 
     public void addAquaticAnimal(Aquatic aquatic) {
