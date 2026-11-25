@@ -10,7 +10,15 @@ public class Animal {
     public Animal() {
     }
 
-    public Animal(String family, String name, int age, boolean isMammal) {
+    public Animal(String family, String name, int age, boolean isMammal)
+            throws InvalidAgeException {
+
+        if (age < 0) {
+            throw new InvalidAgeException(
+                    "Invalid age for " + name + ": age cannot be negative"
+            );
+        }
+
         this.family = family;
         this.name = name;
         this.age = age;
@@ -37,10 +45,14 @@ public class Animal {
         return age;
     }
 
-    public void setAge(int age) {
-        if (age >= 0) {
-            this.age = age;
+    public void setAge(int age) throws InvalidAgeException {
+        if (age < 0) {
+            throw new InvalidAgeException(
+                    "Animal age cannot be negative"
+            );
         }
+
+        this.age = age;
     }
 
     public boolean isMammal() {
